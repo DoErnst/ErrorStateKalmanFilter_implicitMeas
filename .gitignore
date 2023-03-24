@@ -1,0 +1,22 @@
+# see ReadMe for why this file is ignored
+importSimulationInputs.m
+# ignore in- and outputs of runs
+/data/
+# scripts for cluster settings
+*.sh
+# various other possible (intermediate) results
+*.mat
+*.pdf
+*.gif
+*.erg
+*.png
+*.mex*
+/src/mex-files
+/src/erg
+*.mp4
+*.asv
+helpsearch*/
+slprj/
+sccprj/
+codegen/
+*.autosave

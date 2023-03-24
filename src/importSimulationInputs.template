@@ -1,0 +1,42 @@
+%% import simulation settings
+% script for settings of filter of simulated environment
+%
+% Copyright (c) 2023 Dominik Ernst under MIT License
+
+% settings for multiple runs
+rs.numTraj = 100; % how many traj should be generated?
+rs.numMCruns = 1; % how often should a traj be evaluated with noise?
+rs.fixRNG = 0; % fix RNG seed for runs?
+rs.prefix = 'std'; % prefix for differentiating between settings
+% environmental properties
+tr.DATAPATH = '../data/';
+tr.REF_OFFSET = 0; % if planes are measured using CCRs/indirectly
+tr.REF_BUFFER = 0.05; % all planes are axis-aligned -> larger buffer
+tr.mid_point = [5, 4, 3, 1]; % m, as homogeneous coordinates
+tr.refPts = generateEnv();
+[tr.intRegions, tr.intPP] = importROI2(tr.refPts, tr);
+tr.trajLen = 60; % [s], length of generated trajectory (starts with 5s stationary time)
+% stochastic parameters
+%   for IMU: determined from a real Microstrain 3DM-GQ4-45
+st.s_a_w = [0.02226, 0.02035, 0.03636]; % [m/s^2] accelerometer bias instability
+st.s_omega_w = [0.00123, 0.00114, 0.00119]; % [rad/s] gyroscope bias instability
+st.s_a_n = [0.006155, 0.004607, 0.003621]; % [m/s^2 sqrt(s)] accelerometer noise density
+st.s_omega_n = [0.000255, 0.000344, 0.000244]; % [rad/s sqrt(s)] gyroscope noise density
+%   for LiDAR: no offset assumed, stddevs exemplary from real VLP-16
+st.std_r0_LS = 0; % stddev of distance offset
+st.VCM_LS = diag([0.0085^2, 5.1717e-4^2, 8.4648e-4^2]); % stddevs obs.
+st.VCM_LS_IMU = zeros(6); % VCM of trafo LiDAR -> IMU
+st.Q_l_ZUPT = 1e-6; % stddev for ZUPT
+% filter settings
+%   point subsampling: usually ~2900 pts are assigned
+pm.SUBSAMPLING_FACTOR = .02; % how many assigned points are used
+pm.MIN_PTS_PER_UPDATE = 50; % minimum for sampling of points (~2% of pts)
+pm.REM_OUTLIERS_LS = 1; % remove outliers using MAD of assigned points?
+pm.NO_LERP = 0; % avoid interpolation of states?
+% functional parameters
+fp.IMU_Hz = 100; % measurement rate of IMU (100 - 500)
+fp.LiDAR_Hz = 10; % rotation rate of LiDAR (should be 5, 10 or 20)
+fp.g_vec = -[0;0;9.8]; % assumption of Matlab imuSensor simulation
+fp.caliLS2MS = [0,0,0,0,0,0]; % transformation from LiDAR -> IMU
+fp.r0_LS = 0; % value of dist.offset
+fp.R_corr_IMU = eye(3); % correct for IMU in case of misalignments
