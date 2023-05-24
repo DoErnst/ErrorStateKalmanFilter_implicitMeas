@@ -66,7 +66,9 @@ function LS_obs = simulateLiDARdata(traj, H_s_t, H_l_r, H_r_p, intPP, intRegions
     poses_TP = interp1(traj(:,1),traj(:,2:8), timesteps,'pchip');
     poses_TP(:, 4:7) = poses_TP(:, 4:7) ./ vecnorm(poses_TP(:,4:7),2,2);
     for i = 1 : length(timesteps)
+        % trafo matrix system in local frame
         H_t_l = [quat2rotmat(poses_TP(i, 4:7)), poses_TP(i,1:3)'; zeros(1,3),1];
+        % trafo matrix sensor in room frame
         H_s_r = H_l_r * H_t_l * H_s_t;
         H_r_s = H_s_r^-1;
         % trafo ref planes in s-frame

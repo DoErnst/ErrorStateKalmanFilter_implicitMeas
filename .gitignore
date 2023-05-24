@@ -1,4 +1,5 @@
-# see ReadMe for why this file is ignored
+# see ReadMe for why these files is ignored
+importInputs.m
 importSimulationInputs.m
 # ignore in- and outputs of runs
 /data/
@@ -9,6 +10,7 @@ importSimulationInputs.m
 *.pdf
 *.gif
 *.erg
+*.png
 *.mex*
 /src/mex-files
 /src/erg

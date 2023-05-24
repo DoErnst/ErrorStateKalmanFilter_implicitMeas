@@ -32,9 +32,11 @@ function [devs, mds, mds_limits] = compareTraj(trueTraj, filtTraj, covs)
     ix_1 = isnan(tra_diffs(:,1));
     ix_2 = isnan(rot_diffs(:,1));
     ix_ = or(ix_1, ix_2);
-    tra_diffs(ix_,:) = [];
+    tra_diffs(ix_, :) = [];
     rot_diffs(ix_, :) = [];
+    covs(:, :, ix_) = [];
     devs = [tra_diffs, rot_diffs];
+    n = size(devs, 1);
     
     % standard deviations
     stds = nan(n, 6);

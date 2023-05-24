@@ -50,9 +50,12 @@ function plotDevsMds(times,devs,mds,rs)
     figure
     rmse_tra = sqrt(mean(mean(devs(:,1:3,:).^2,2),3));
     rmse_rot = sqrt(mean(mean(devs(:,4:6,:).^2,2),3));
+    rmse_tot = sqrt(mean(mean(devs(:,1:6,:).^2,2),3));
     rmse_tra_full = sqrt(mean(rmse_tra.^2));
     rmse_rot_full = sqrt(mean(rmse_rot.^2));
+    rmse_tot_full = sqrt(mean(rmse_tot.^2));
     disp(['[I] RMSE: ', num2str(rmse_tra_full*1e3,'%.2f'),' mm , ',num2str(rad2deg(rmse_rot_full)*1e3,'%.2f'),' mdeg']);
+    disp(['[I] RMSE: ', num2str(rmse_tot_full*1e3,'%.2f'),' [mm|rad]']);
     % translations
     subplot(2,1,1)
     plot(times,rmse_tra .* 1e3,'Color',[0,0,1])

@@ -1,0 +1,53 @@
+%% import settings for real data set
+% script for settings of filter for processing real data from lab
+%
+% Copyright (c) 2023 Dominik Ernst under MIT License
+
+tr.DATAPATH = '..\data\';
+SIMU = false;
+% load data for run
+RUN = 4; % 1-4 or 6
+PCL_FNAME = ['meas_', num2str(RUN,'%i'), '_pcl.mat'];
+LS_obs_n = load([tr.DATAPATH, '/sensor_data/', PCL_FNAME]).LS_obs;
+IMU_obs_n = load([tr.DATAPATH,'/sensor_data/expIMU_', num2str(RUN,'%i'), '.mat']).expIMU;
+LT_tracking_obs = readmatrix([tr.DATAPATH,'/sensor_data/meas_', num2str(RUN,'%i'), '_comb.csv']);
+% VCM of LS
+st.VCM_LS = diag([0.0085^2, 5.1717e-4^2, 8.4648e-4^2]); % from VCE
+mat_r0 = readmatrix([tr.DATAPATH, '/poses/cali4r0.csv']);
+fp.r0_LS = mat_r0(1);
+st.std_r0_LS = mat_r0(2);
+% results of calibration - translations in m
+[tr.pose_PCS, tr.VCM_PCS] = readStaticPoseVCM([tr.DATAPATH, '/poses/cali4.csv']);
+% pose of LT in WCS - translations in mm
+[tr.pose_WCS, tr.VCM_WCS] = readStaticPoseVCM([tr.DATAPATH, '/poses/LT_WCS2.csv']);
+% trafo PCS -> TP - translation in mm
+[tr.pose_TP, tr.VCM_TP] = readStaticPoseVCM([tr.DATAPATH, '/poses/PCS_TP2.csv']);
+% pose IMU in body frame
+[tr.pose_LS_IMU, st.VCM_LS_IMU] = readStaticPoseVCM([tr.DATAPATH, '/poses/LS_IMU.csv']);
+% mid point for plane normals (as homogeneous coord)
+tr.mid_point = [12.5, 14.5, 0.8, 1]; % m
+% more default values
+tr.REF_OFFSET = 0.01905; % 1.5" CCR
+tr.REF_BUFFER = 0.01; % buffer around reference geometries
+% gravity vector
+fp.g_vec = [0,0,9.81]';
+% environment
+if SIMU
+    [tr.intRegions, tr.intPP,~,tr.refPts] = importROI([tr.DATAPATH, '/LT_ref_simu/'], tr);
+else
+    [tr.intRegions, tr.intPP,~,tr.refPts] = importROI([tr.DATAPATH, '/LT_ref/'], tr);
+end
+% stochastic model IMU
+st.s_a_w = [0.02226, 0.02035, 0.03636]; % [m/s^2] accelerometer bias instability
+st.s_omega_w = [0.00123, 0.00114, 0.00119]; % [rad/s] gyroscope bias instability
+st.s_a_n = [0.006155, 0.004607, 0.003621]; % [m/s^2 sqrt(s)] accelerometer noise density
+st.s_omega_n = [0.000255, 0.000344, 0.000244]; % [rad/s sqrt(s)] gyroscope noise density
+% filter settings
+%   point subsampling: usually ~2900 pts are assigned
+pm.SUBSAMPLING_FACTOR = 1; % how many assigned points are used
+pm.MIN_PTS_PER_UPDATE = 50; % minimum for sampling of points (~2% of pts)
+pm.REM_OUTLIERS_LS = 1; % remove outliers using MAD of assigned points?
+pm.NO_LERP = 0; % avoid interpolation of states?
+% simulation settings
+fp.IMU_Hz = 100; % measurement rate of IMU (100 - 500)
+fp.LiDAR_Hz = 10; % rotation rate of LiDAR (should be 5, 10 or 20)
