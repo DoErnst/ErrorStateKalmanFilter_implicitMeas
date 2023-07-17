@@ -2,7 +2,8 @@
 importInputs.m
 importSimulationInputs.m
 # ignore in- and outputs of runs
-/data/
+/data/input
+/data/output
 # scripts for cluster settings
 *.sh
 # various other possible (intermediate) results

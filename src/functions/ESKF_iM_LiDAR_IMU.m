@@ -24,7 +24,7 @@ function [states,covs,time] = ESKF_iM_LiDAR_IMU(LS_obs, IMU_obs, x0, Qx0, st, fp
     
     % check inputs -> set defaults otherwise (some with warnings)
     % also acts as documentation for the necessary filter inputs
-    [st, fp, pm] = checkFilterInputs(st, fp, pm, IMU_obs);
+    [st, fp, pm] = checkFilterInputs(st, fp, pm);
 
     % Sola, 2017 sec: 7.2
     % nominal state vector -> error states with prefix d_

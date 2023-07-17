@@ -6,7 +6,7 @@
 
 addpath('functions')
 importSimulationInputs;
-PATH = "C:\Users\l2a-s69\Downloads\output\";
+PATH = "..\data\output\";
 % set variants to compare:
 vars = {'base', 'nolerp'};
 n = length(vars);

@@ -1,4 +1,4 @@
-function [st, fp, pm] = checkFilterInputs(st, fp, pm, IMU_obs)
+function [st, fp, pm] = checkFilterInputs(st, fp, pm)
 %CHECKFILTERINPUTS checks to structs for the filter settings
 %   makes sure all settings for the filter are set/plausible
 %   throws warning otherwise and sets defaults

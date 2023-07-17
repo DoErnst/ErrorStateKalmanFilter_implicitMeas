@@ -7,15 +7,17 @@
 rs.numTraj = 100; % how many traj should be generated?
 rs.numMCruns = 1; % how often should a traj be evaluated with noise?
 rs.fixRNG = 0; % fix RNG seed for runs?
-rs.prefix = 'std'; % prefix for differentiating between settings
+rs.prefix = 'base'; % prefix for differentiating between settings
 % environmental properties
 tr.DATAPATH = '../data/';
 tr.REF_OFFSET = 0; % if planes are measured using CCRs/indirectly
 tr.REF_BUFFER = 0.05; % all planes are axis-aligned -> larger buffer
 tr.mid_point = [5, 4, 3, 1]; % m, as homogeneous coordinates
 tr.refPts = generateEnv();
-[tr.intRegions, tr.intPP] = importROI2(tr.refPts, tr);
+[tr.intRegions, tr.intPP, tr.H_r_p, tr.refPts_r] = importROI2(tr.refPts, tr);
 tr.trajLen = 60; % [s], length of generated trajectory (starts with 5s stationary time)
+tr.H_s_t = eye(4);
+tr.H_l_r = eye(4);
 % stochastic parameters
 %   for IMU: determined from a real Microstrain 3DM-GQ4-45
 st.s_a_w = [0.02226, 0.02035, 0.03636]; % [m/s^2] accelerometer bias instability

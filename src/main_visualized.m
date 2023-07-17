@@ -33,7 +33,7 @@ LS_obs_n = [LS_obs_n, LS_obs(:,5)];
 [devs, mds, mds_limits] = compareTraj(traj_IMU(:,2:end),states, statesVCM);
 %% Static Plots
 plotDevsMds(traj_IMU(:,1),devs,mds);
-return
+return % remove for animated plot
 %% Animated Plot
 % timesteps of LiDAR columns (max. 16 points at once)
 timesteps = unique(LS_obs(:,1));

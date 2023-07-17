@@ -8,7 +8,7 @@ addpath('functions')
 importSimulationInputs;
 % iterate through result files and collect result matrices
 %d = dir([tr.DATAPATH,'/output/']);
-d = dir('C:\Users\l2a-s69\Downloads\output');
+d = dir('..\data\output');
 dev_cell = cell(1, length(d));
 mds_cell = cell(1, length(d));
 ff = 0; % counter for found files
